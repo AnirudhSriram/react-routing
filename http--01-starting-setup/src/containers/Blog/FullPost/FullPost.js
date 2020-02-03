@@ -6,17 +6,27 @@ class FullPost extends Component {
     state={
         post : null
     }
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.id !== this.props.id) {
-            axios.get(`/posts/${this.props.id}`).then(data => {
-                this.setState({
-                    title : data.data.title,
-                    body  :data.data.body,
-                    post : data.data
-                })
+    loadData = ()=> {
+        axios.get(`/posts/${this.props.match.params.id}`).then(data => {
+            this.setState({
+                title : data.data.title,
+                body  :data.data.body,
+                post : data.data
             })
+        })
+    
+    }
+    componentDidMount(prevProps) {
+        console.log(this.props)
+        this.loadData() 
+    }
+    componentDidUpdate(prevProps){
+        if(prevProps.match.params.id !== this.props.match.params.id){
+            this.loadData();
         }
     }
+
+
     deletePostHandler=()=> {
         axios.delete(`/posts/${this.props.id}`)
     }

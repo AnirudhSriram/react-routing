@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 
 import './NewPost.css';
 import Axios from 'axios';
-
+import {Redirect} from 'react-router-dom';
 class NewPost extends Component {
     state = {
         title: '',
         content: '',
-        author: 'Max'
+        author: 'Max',
+        sumbitted : false
     }
     componentDidMount(){
         console.log(this.props);
@@ -16,13 +17,14 @@ class NewPost extends Component {
         const post={
             title:this.state.title,
             content : this.state.content,
-            author:this.state.author
+            author:this.state.author,
         }
-        Axios.post(`/posts`,post).then(data=>console.log(data))
+        Axios.post(`/posts`,post).then(data=>this.setState({sumbitted:true}));
     }
     render () {
         return (
             <div className="NewPost">
+                {this.state.sumbitted ? <Redirect to='/' /> : null }
                 <h1>Add a Post</h1>
                 <label>Title</label>
                 <input type="text" value={this.state.title} onChange={(event) => this.setState({title: event.target.value})} />

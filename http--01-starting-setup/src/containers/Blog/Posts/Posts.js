@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import axios from '../../../axios';
 import '../Posts/Posts.css'
 import Post from '../../../components/Post/Post';
+import { Route } from 'react-router';
+import FullPost from '../FullPost/FullPost';
 class Posts extends Component {
     state = {
         posts: [],
@@ -20,18 +22,24 @@ class Posts extends Component {
         }).catch(err => this.setState({ error: true }));
     }
 
+
     postClickHandler = (id) => {
-        this.setState({ selectedPostId: id });
+        this.props.history.push('/' + id)
     }
     render() {
         let renderPosts = <p>Something went wrong</p>;
         if (!this.state.error) {
             renderPosts = this.state.posts.map((item) => <Post key={item.id} title={item.title} author={item.author} clicked={() => this.postClickHandler(item.id)} />)
         }
+
         return (
-            <section className="Posts">
-                {renderPosts}
-            </section>
+            <div>
+                <section className="Posts">
+                    {renderPosts}
+                    </section>
+            <Route path="/:id" component={FullPost} />
+            </div>
+           
         )
 
     }
